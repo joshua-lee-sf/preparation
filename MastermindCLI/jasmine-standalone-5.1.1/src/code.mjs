@@ -1,4 +1,3 @@
-
 class Code {
 
     static PossiblePegs = {
@@ -32,15 +31,15 @@ class Code {
 
     static fromString(charString) {
         const charArray = charString.split('');
-        const newCode = new Code(charArray);
-        return newCode;
+        return new Code(charArray);
     }
 
     constructor(charArray){
         if (!Code.validPegs(charArray)) {
-            throw new Error('Invalid Pegs');
+            // throw new Error('Invalid Pegs');
         }
-        this.pegs = charArray.map((char) => char.toUpperCase());
+        let pegs = charArray.map((char) => char.toUpperCase());
+        this.pegs = pegs.slice();
     }
 
     // pegs(){
@@ -49,15 +48,25 @@ class Code {
 
     length(){
         return this.pegs.length;
-        console.log(this.pegs.length);
     }
+
 
     at(index){
         return this.pegs[index];
     }
 
     equals(guessCode){
-        return guessCode.pegs === this.pegs;
+        const guessCodeValues = Object.values(guessCode.pegs);
+        const pegValues = Object.values(this.pegs);
+
+        if (guessCodeValues.length !== pegValues.length) return false;
+
+        for (let i = 0; i < guessCodeValues.length; i++){
+            if (guessCodeValues[i] !== pegValues[i]){
+                return false;
+            };
+        }
+        return true;
     }
 
     numExactMatches(guessCode){
@@ -67,8 +76,8 @@ class Code {
         for (let i = 0; i < length; i++){
             if (guessCode.at(i) === this.pegs.at(i)) {
                 count++;
-            }
-        }
+            };
+        };
         return count;
     }
 
@@ -84,7 +93,7 @@ class Code {
                 correctCodeDup[i] = null;
             }
             i++;
-        }
+        };
 
         let count = 0;
         for (let j = 0; j < guessCodeDup.length; j++){
@@ -93,9 +102,11 @@ class Code {
                 let pegIndex = correctCodeDup.indexOf(curr);
                 correctCodeDup[pegIndex] = null;
                 count++;
-            }
-        }
+            };
+        };
 
         return count;
-    }
-}
+    };
+};
+
+export default Code;
